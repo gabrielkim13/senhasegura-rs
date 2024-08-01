@@ -1,0 +1,36 @@
+[package]
+name = "senhasegura-rs"
+version = "0.1.0"
+edition = "2021"
+publish = true
+authors = ["Gabriel Kim<gabrielkim13@gmail.com>"]
+description = "Senhasegura API client for Rust"
+repository = "https://github.com/gabrielkim13/senhasegura-rs"
+homepage = "https://github.com/gabrielkim13/senhasegura-rs"
+
+[dependencies]
+anyhow = "1"
+chrono = "0.4"
+http = "1"
+oauth2 = { version = "5.0.0-alpha.4", default-features = false, features = ["ureq"] }
+retry = { version = "2", optional = true }
+serde = { version = "1", features = ["derive"] }
+serde-aux = { version = "4", default-features = false }
+serde_json = "1"
+serde_repr = "0.1"
+thiserror = "1"
+tracing = "0.1"
+ureq = { version = "2", features = ["json", "native-certs"] }
+url = { version = "2", features = ["serde"] }
+
+[dev-dependencies]
+test-context = "0.3"
+tokio = { version = "1", features = ["test-util"] }
+tracing-subscriber = "0.3"
+wiremock = "0.6"
+
+[features]
+default = ["retry"]
+
+# Enables exponential backoff retry strategy
+retry = ["dep:retry"]
