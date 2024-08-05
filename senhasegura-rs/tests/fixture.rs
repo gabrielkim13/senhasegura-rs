@@ -47,6 +47,8 @@ impl AsyncTestContext for Fixture {
         let client = {
             let base_url = Url::parse(&server.uri()).unwrap();
 
+            tracing::info!(?base_url);
+
             SenhaseguraClient::builder(base_url, Self::CLIENT_ID, Self::CLIENT_SECRET)
                 .build()
                 .unwrap()

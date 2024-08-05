@@ -26,6 +26,6 @@ impl DisableProtectedInformationAPI for SenhaseguraClient {
         &self,
         id: String,
     ) -> Result<DisableProtectedInformationAPIResponse, Error> {
-        self.do_api_operation(Method::DELETE, &format!("/iso/pam/info/{id}"), None::<()>)
+        self.do_api_operation(Method::DELETE, &format!("iso/pam/info/{id}"), None::<()>)
     }
 }

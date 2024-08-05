@@ -47,6 +47,6 @@ impl AccessProtectedInformationAPI for SenhaseguraClient {
         &self,
         id: i32,
     ) -> Result<AccessProtectedInformationAPIResponse, Error> {
-        self.do_api_operation(Method::GET, &format!("/iso/pam/info/{id}"), None::<()>)
+        self.do_api_operation(Method::GET, &format!("iso/pam/info/{id}"), None::<()>)
     }
 }

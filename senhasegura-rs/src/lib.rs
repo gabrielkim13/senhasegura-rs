@@ -263,9 +263,11 @@ impl SenhaseguraClientBuilder {
         let base_url = {
             let mut base_url = self.base_url;
 
-            if let Ok(mut p) = base_url.path_segments_mut() {
-                p.pop_if_empty();
+            let mut path = base_url.path().to_string();
+            if !path.ends_with('/') {
+                path.push('/');
             }
+            base_url.set_path(&path);
 
             base_url
         };
@@ -280,7 +282,7 @@ impl SenhaseguraClientBuilder {
         let oauth2_client = oauth2::basic::BasicClient::new(oauth2::ClientId::new(self.client_id))
             .set_client_secret(oauth2::ClientSecret::new(self.client_secret))
             .set_token_uri(oauth2::TokenUrl::from_url(
-                base_url.join("/iso/oauth2/token")?,
+                base_url.join("iso/oauth2/token")?,
             ))
             .set_auth_type(oauth2::AuthType::RequestBody);
 

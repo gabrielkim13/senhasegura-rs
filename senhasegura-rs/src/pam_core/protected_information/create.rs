@@ -71,6 +71,6 @@ impl CreateProtectedInformationAPI for SenhaseguraClient {
         &self,
         request: CreateProtectedInformationAPIRequest,
     ) -> Result<CreateProtectedInformationAPIResponse, Error> {
-        self.do_api_operation(Method::POST, "/iso/pam/info", Some(request))
+        self.do_api_operation(Method::POST, "iso/pam/info", Some(request))
     }
 }
