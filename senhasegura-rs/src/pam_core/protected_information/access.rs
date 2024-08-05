@@ -6,7 +6,7 @@ use crate::{Error, Response, SenhaseguraClient};
 /// Access protected information API response.
 #[derive(serde::Deserialize, Debug)]
 #[cfg_attr(feature = "napi", napi_derive::napi(object))]
-pub struct AccessProtectedInformationAPIResponse {
+pub struct AccessProtectedInformationApiResponse {
     /// Response.
     pub response: Response,
 
@@ -35,20 +35,20 @@ pub struct AccessProtectedInformationResult {
 /// Trait to access protected information.
 ///
 /// See [Access protected information](https://docs.senhasegura.io/docs/a2a-pam-core-access-protected-information).
-pub trait AccessProtectedInformationAPI {
+pub trait AccessProtectedInformationApi {
     /// Returns the protected information item.
     fn access_protected_information(
         &self,
         id: i32,
-    ) -> Result<AccessProtectedInformationAPIResponse, Error>;
+    ) -> Result<AccessProtectedInformationApiResponse, Error>;
 }
 
-impl AccessProtectedInformationAPI for SenhaseguraClient {
+impl AccessProtectedInformationApi for SenhaseguraClient {
     #[tracing::instrument(level = "info", skip(self), err)]
     fn access_protected_information(
         &self,
         id: i32,
-    ) -> Result<AccessProtectedInformationAPIResponse, Error> {
+    ) -> Result<AccessProtectedInformationApiResponse, Error> {
         self.do_api_operation(Method::GET, &format!("iso/pam/info/{id}"), None::<()>)
     }
 }

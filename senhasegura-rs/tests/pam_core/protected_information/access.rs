@@ -7,7 +7,7 @@ use wiremock::{
 };
 
 use senhasegura_rs::{
-    AccessProtectedInformationAPI, Error, ExceptionCode, PAMCoreExceptionCode,
+    AccessProtectedInformationApi, Error, ExceptionCode, PAMCoreExceptionCode,
     ProtectedInformationExceptionCode,
 };
 
@@ -83,7 +83,7 @@ async fn test_access_protected_information_not_found(fixture: &mut Fixture) {
         .access_protected_information(id)
         .unwrap_err();
 
-    if let Error::API(api_error) = response {
+    if let Error::Api(api_error) = response {
         let response = api_error.response;
 
         assert_eq!(response.status, StatusCode::BAD_REQUEST);
@@ -137,7 +137,7 @@ async fn test_access_protected_information_unknown_exception(fixture: &mut Fixtu
         .access_protected_information(id)
         .unwrap_err();
 
-    if let Error::API(api_error) = response {
+    if let Error::Api(api_error) = response {
         let exception = api_error.exception.unwrap();
 
         assert!(matches!(exception.code, ExceptionCode::Unknown(9999)));

@@ -4,11 +4,11 @@
     100
   ],
   "rust-analyzer.check.command": "clippy",
-  "rust-analyzer.procMacro.ignored": {
-    "napi-derive": [
-      "napi"
-    ]
-  },
+  // "rust-analyzer.procMacro.ignored": {
+  //   "napi-derive": [
+  //     "napi"
+  //   ]
+  // },
   "[markdown]": {
     "editor.wordWrap": "off"
   },

@@ -24,14 +24,14 @@ pub enum ProtectedInformationExceptionCode {
 /// Trait to manage protected information.
 ///
 /// See [Protected Information API](https://docs.senhasegura.io/docs/a2a-pam-core-protected-information-api).
-pub trait ProtectedInformationAPI:
-    AccessProtectedInformationAPI + CreateProtectedInformationAPI + DisableProtectedInformationAPI
+pub trait ProtectedInformationApi:
+    AccessProtectedInformationApi + CreateProtectedInformationApi + DisableProtectedInformationApi
 {
 }
 
-impl<T> ProtectedInformationAPI for T where
-    T: AccessProtectedInformationAPI
-        + CreateProtectedInformationAPI
-        + DisableProtectedInformationAPI
+impl<T> ProtectedInformationApi for T where
+    T: AccessProtectedInformationApi
+        + CreateProtectedInformationApi
+        + DisableProtectedInformationApi
 {
 }

@@ -14,6 +14,4 @@ test("instantiate SenhaseguraClient", (t) => {
         instanceOf: Error,
         message: "Request failed",
     });
-
-    client.createProtectedInformation({});
 });

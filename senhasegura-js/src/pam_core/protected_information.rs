@@ -9,7 +9,7 @@ impl SenhaseguraClient {
     pub fn access_protected_information(
         &self,
         id: i32,
-    ) -> napi::Result<AccessProtectedInformationAPIResponse> {
+    ) -> napi::Result<AccessProtectedInformationApiResponse> {
         Ok(self.client.access_protected_information(id)?)
     }
 
@@ -17,8 +17,8 @@ impl SenhaseguraClient {
     #[napi]
     pub fn create_protected_information(
         &self,
-        request: CreateProtectedInformationAPIRequest,
-    ) -> napi::Result<CreateProtectedInformationAPIResponse> {
+        request: CreateProtectedInformationApiRequest,
+    ) -> napi::Result<CreateProtectedInformationApiResponse> {
         Ok(self.client.create_protected_information(request)?)
     }
 
@@ -27,7 +27,7 @@ impl SenhaseguraClient {
     pub fn disable_protected_information(
         &self,
         id: String,
-    ) -> napi::Result<DisableProtectedInformationAPIResponse> {
+    ) -> napi::Result<DisableProtectedInformationApiResponse> {
         Ok(self.client.disable_protected_information(id)?)
     }
 }

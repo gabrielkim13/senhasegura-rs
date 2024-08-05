@@ -48,9 +48,9 @@ use url::Url;
 /// Trait to interact with Senhasegura APIs.
 ///
 /// See [A2A - APIs](https://docs.senhasegura.io/docs/a2a-apis).
-pub trait SenhaseguraAPI: PAMCoreAPI {}
+pub trait SenhaseguraApi: PAMCoreApi {}
 
-impl<T> SenhaseguraAPI for T where T: PAMCoreAPI {}
+impl<T> SenhaseguraApi for T where T: PAMCoreApi {}
 
 /// Senhasegura API client.
 #[derive(Clone, Debug)]
@@ -156,9 +156,9 @@ impl SenhaseguraClient {
                 Ok(response)
             }
             Err(ureq::Error::Status(_, res)) => {
-                let api_error = res.into_json::<crate::APIError>()?;
+                let api_error = res.into_json::<crate::ApiError>()?;
 
-                Err(Error::API(api_error))
+                Err(Error::Api(api_error))
             }
             Err(ureq::Error::Transport(transport)) => Err(Error::Transport(Box::new(transport))),
         }
@@ -182,7 +182,7 @@ impl SenhaseguraClient {
                 .take(self.max_retries),
             |i| match operation() {
                 Ok(res) => OperationResult::Ok(res),
-                Err(err @ (Error::API(_) | Error::Other(_))) => {
+                Err(err @ (Error::Api(_) | Error::Other(_))) => {
                     tracing::debug!(error = ?err, "Unrecoverable error");
 
                     OperationResult::Err(err)

@@ -10,7 +10,7 @@ pub enum Error {
     /// This error occurs when a request to the API is successful, but returns an error status code
     /// (e.g. 4xx or 5xx).
     #[error(transparent)]
-    API(#[from] APIError),
+    Api(#[from] ApiError),
 
     /// Transport error.
     ///
@@ -27,7 +27,7 @@ pub enum Error {
 
 /// API error response.
 #[derive(serde::Deserialize, Debug)]
-pub struct APIError {
+pub struct ApiError {
     /// Response.
     pub response: Response,
 
@@ -35,13 +35,13 @@ pub struct APIError {
     pub exception: Option<Exception>,
 }
 
-impl std::fmt::Display for APIError {
+impl std::fmt::Display for ApiError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "{}", self.response.message)
     }
 }
 
-impl std::error::Error for APIError {}
+impl std::error::Error for ApiError {}
 
 impl From<url::ParseError> for Error {
     fn from(err: url::ParseError) -> Self {

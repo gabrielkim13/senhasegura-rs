@@ -6,7 +6,7 @@ use wiremock::{
     Mock, ResponseTemplate,
 };
 
-use senhasegura_rs::DisableProtectedInformationAPI;
+use senhasegura_rs::DisableProtectedInformationApi;
 
 use crate::fixture::Fixture;
 

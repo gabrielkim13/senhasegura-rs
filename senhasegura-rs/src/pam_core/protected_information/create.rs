@@ -6,7 +6,7 @@ use crate::{Error, Response, SenhaseguraClient};
 #[derive(serde::Serialize, Debug)]
 #[cfg_attr(feature = "retry", derive(Clone))]
 #[cfg_attr(feature = "napi", napi_derive::napi(object))]
-pub struct CreateProtectedInformationAPIRequest {
+pub struct CreateProtectedInformationApiRequest {
     /// Name assigned to the protected item.
     pub name: Option<String>,
 
@@ -23,7 +23,7 @@ pub struct CreateProtectedInformationAPIRequest {
 /// Create protected information API response.
 #[derive(serde::Deserialize, Debug)]
 #[cfg_attr(feature = "napi", napi_derive::napi(object))]
-pub struct CreateProtectedInformationAPIResponse {
+pub struct CreateProtectedInformationApiResponse {
     /// Response.
     pub response: Response,
 
@@ -60,20 +60,20 @@ pub struct CreateProtectedInformationResult {
 /// Trait to create protected information.
 ///
 /// See [Create protected information](https://docs.senhasegura.io/docs/a2a-pam-core-create-protected-information).
-pub trait CreateProtectedInformationAPI {
+pub trait CreateProtectedInformationApi {
     /// Creates a protected information item.
     fn create_protected_information(
         &self,
-        request: CreateProtectedInformationAPIRequest,
-    ) -> Result<CreateProtectedInformationAPIResponse, Error>;
+        request: CreateProtectedInformationApiRequest,
+    ) -> Result<CreateProtectedInformationApiResponse, Error>;
 }
 
-impl CreateProtectedInformationAPI for SenhaseguraClient {
+impl CreateProtectedInformationApi for SenhaseguraClient {
     #[tracing::instrument(level = "info", skip(self), err)]
     fn create_protected_information(
         &self,
-        request: CreateProtectedInformationAPIRequest,
-    ) -> Result<CreateProtectedInformationAPIResponse, Error> {
+        request: CreateProtectedInformationApiRequest,
+    ) -> Result<CreateProtectedInformationApiResponse, Error> {
         self.do_api_operation(Method::POST, "iso/pam/info", Some(request))
     }
 }

@@ -15,6 +15,6 @@ pub enum PAMCoreExceptionCode {
 /// Trait to interact with PAM Core APIs.
 ///
 /// See [PAM Core APIs](https://docs.senhasegura.io/docs/a2a-apis-pam-core).
-pub trait PAMCoreAPI: ProtectedInformationAPI {}
+pub trait PAMCoreApi: ProtectedInformationApi {}
 
-impl<T> PAMCoreAPI for T where T: ProtectedInformationAPI {}
+impl<T> PAMCoreApi for T where T: ProtectedInformationApi {}

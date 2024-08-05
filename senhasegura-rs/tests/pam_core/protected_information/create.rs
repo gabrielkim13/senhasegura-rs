@@ -6,7 +6,7 @@ use wiremock::{
     Mock, ResponseTemplate,
 };
 
-use senhasegura_rs::{CreateProtectedInformationAPI, CreateProtectedInformationAPIRequest};
+use senhasegura_rs::{CreateProtectedInformationApi, CreateProtectedInformationApiRequest};
 
 use crate::fixture::Fixture;
 
@@ -48,7 +48,7 @@ async fn test_create_protected_information(fixture: &mut Fixture) {
 
     let response = fixture
         .client()
-        .create_protected_information(CreateProtectedInformationAPIRequest {
+        .create_protected_information(CreateProtectedInformationApiRequest {
             name: Some("saas_vault1".to_string()),
             content: "login: mt4adm, password: mt4admp4ss".to_string(),
             identifier: Some("INFOSAASVAULT1".to_string()),
