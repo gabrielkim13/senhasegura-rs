@@ -52,6 +52,10 @@
 
 A Rust library for interacting with [senhasegura](https://senhasegura.com)'s API.
 
+The goal of this project is to enable interaction with senhasegura's APIs in many languages /
+runtimes while maintaining a single core codebase (i.e. `senhasegura-rs`) and several other
+libraries bound to it.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
@@ -66,7 +70,20 @@ A Rust library for interacting with [senhasegura](https://senhasegura.com)'s API
 
 * [Rust](https://www.rust-lang.org/learn/get-started)
 
+#### Cross-compilation
+
+In order to cross-compile to Windows MSVC target, install
+[cargo-xwin](https://github.com/rust-cross/cargo-xwin):
+
+```sh
+cargo install --locked cargo-xwin
+rustup target add x86_64-pc-windows-msvc
+rustup component add llvm-tools-preview
+```
+
 ### Installation
+
+#### Rust
 
 ```toml
 [dependencies]
@@ -76,6 +93,8 @@ senhasegura-rs = "0.1"
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Usage
+
+### Rust
 
 ```rs
 use senhasegura_rs::{AccessProtectedInformationAPI, SenhaseguraClient};
@@ -96,6 +115,8 @@ _For more examples, please refer to the [Documentation](https://docs.rs/senhaseg
 
 ## Roadmap
 
+### Senhasegura APIs
+
 - [PAM Core APIs](https://docs.senhasegura.io/docs/a2a-apis-pam-core)
   - [ ] [Credentials API](https://docs.senhasegura.io/docs/a2a-pam-core-credentials-api)
   - [ ] [Devices API](https://docs.senhasegura.io/docs/a2a-pam-core-devices-api)
@@ -103,6 +124,16 @@ _For more examples, please refer to the [Documentation](https://docs.rs/senhaseg
   - [ ] [SSH Keys API](https://docs.senhasegura.io/docs/a2a-pam-core-ssh-keys-api)
   - [x] [Protected information API](https://docs.senhasegura.io/docs/en/a2a-pam-core-protected-information-api)
 - [ ] [Related users API](https://docs.senhasegura.io/docs/a2a-pam-core-related-users-api)
+
+### Languages
+
+- [x] [Rust](https://www.rust-lang.org/)
+    - [ ] Native libraries (i.e. `.so`, `.dylib`, `.dll`)
+- [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript) / [TypeScript](https://www.typescriptlang.org/)
+    - [x] [Node.js](https://nodejs.org/)
+- [ ] [PHP](https://dotnet.microsoft.com/languages/csharp)
+- [ ] [Python](https://www.python.org/)
+- [ ] [C#](https://dotnet.microsoft.com/languages/csharp)
 
 See the [open issues](https://github.com/gabrielkim13/senhasegura-rs/issues) for a full list of proposed features (and known issues).
 
@@ -140,6 +171,7 @@ Project Link: [https://github.com/gabrielkim13/senhasegura-rs](https://github.co
 ## Acknowledgments
 
 * [Senhasegura Documentation](https://docs.senhasegura.io/docs)
+* [NAPI-RS](https://napi.rs/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

@@ -22,24 +22,26 @@ async fn test_create_protected_information(fixture: &mut Fixture) {
             "identifier": "INFOSAASVAULT1",
             "type": "access Credential"
         })))
-        .respond_with(ResponseTemplate::new(StatusCode::OK).set_body_json(json!({
-            "response": {
-                "status": 201,
-                "mensagem": "Information successfully registered!",
-                "erro": false,
-                "message": "Information successfully registered!",
-                "error": false
-            },
-            "info": {
-                "name": "saas_vault1",
-                "type": "access credential",
-                "service": "saas_client",
-                "url": "10.10.10.2",
-                "content": "login: mt4adm, password: mt4admp4ss",
-                "users_allowed": "admin, account_manager, mscharra",
-                "identifier": "INFOSAASVAULT1"
-            }
-        })))
+        .respond_with(
+            ResponseTemplate::new(StatusCode::CREATED).set_body_json(json!({
+                "response": {
+                    "status": 201,
+                    "mensagem": "Information successfully registered!",
+                    "erro": false,
+                    "message": "Information successfully registered!",
+                    "error": false
+                },
+                "info": {
+                    "name": "saas_vault1",
+                    "type": "access credential",
+                    "service": "saas_client",
+                    "url": "10.10.10.2",
+                    "content": "login: mt4adm, password: mt4admp4ss",
+                    "users_allowed": "admin, account_manager, mscharra",
+                    "identifier": "INFOSAASVAULT1"
+                }
+            })),
+        )
         .expect(1)
         .mount(fixture.server())
         .await;

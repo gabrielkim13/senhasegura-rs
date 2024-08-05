@@ -1,9 +1,9 @@
 {
-    "recommendations": [
-        "fill-labs.dependi",
-        "usernamehw.errorlens",
-        "tamasfe.even-better-toml",
-        "rust-lang.rust-analyzer",
-        "vadimcn.vscode-lldb"
-    ]
+  "recommendations": [
+    "fill-labs.dependi",
+    "usernamehw.errorlens",
+    "tamasfe.even-better-toml",
+    "rust-lang.rust-analyzer",
+    "vadimcn.vscode-lldb"
+  ]
 }

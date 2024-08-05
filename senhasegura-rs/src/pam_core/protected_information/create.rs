@@ -5,6 +5,7 @@ use crate::{Error, Response, SenhaseguraClient};
 /// Create protected information API request.
 #[derive(serde::Serialize, Debug)]
 #[cfg_attr(feature = "retry", derive(Clone))]
+#[cfg_attr(feature = "napi", napi_derive::napi(object))]
 pub struct CreateProtectedInformationAPIRequest {
     /// Name assigned to the protected item.
     pub name: Option<String>,
@@ -21,6 +22,7 @@ pub struct CreateProtectedInformationAPIRequest {
 
 /// Create protected information API response.
 #[derive(serde::Deserialize, Debug)]
+#[cfg_attr(feature = "napi", napi_derive::napi(object))]
 pub struct CreateProtectedInformationAPIResponse {
     /// Response.
     pub response: Response,
@@ -31,6 +33,7 @@ pub struct CreateProtectedInformationAPIResponse {
 
 /// Create protected information result (i.e. "info") field.
 #[derive(serde::Deserialize, Debug)]
+#[cfg_attr(feature = "napi", napi_derive::napi(object))]
 pub struct CreateProtectedInformationResult {
     /// Name assigned to the protected item.
     pub name: Option<String>,

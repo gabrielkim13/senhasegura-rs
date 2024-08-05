@@ -8,7 +8,7 @@ mod disable;
 pub use disable::*;
 
 /// Protected information exception codes.
-#[derive(serde_repr::Deserialize_repr, Debug)]
+#[derive(serde_repr::Deserialize_repr, strum::FromRepr, Debug)]
 #[repr(u16)]
 pub enum ProtectedInformationExceptionCode {
     /// Information not found.

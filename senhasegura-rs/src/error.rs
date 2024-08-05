@@ -54,3 +54,14 @@ impl From<io::Error> for Error {
         Self::Other(err.into())
     }
 }
+
+#[cfg(feature = "napi")]
+mod senhasegura_js {
+    use super::*;
+
+    impl From<Error> for napi::Error {
+        fn from(value: Error) -> Self {
+            napi::Error::from_reason(value.to_string())
+        }
+    }
+}

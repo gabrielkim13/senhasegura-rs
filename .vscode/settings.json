@@ -1,16 +1,21 @@
 {
-    "editor.formatOnSave": true,
-    "editor.rulers": [
-        100
-    ],
-    "rust-analyzer.check.command": "clippy",
-    "[markdown]": {
-        "editor.wordWrap": "off"
-    },
-    "[rust]": {
-        "editor.defaultFormatter": "rust-lang.rust-analyzer"
-    },
-    "[toml]": {
-        "editor.formatOnSave": false
-    }
+  "editor.formatOnSave": true,
+  "editor.rulers": [
+    100
+  ],
+  "rust-analyzer.check.command": "clippy",
+  "rust-analyzer.procMacro.ignored": {
+    "napi-derive": [
+      "napi"
+    ]
+  },
+  "[markdown]": {
+    "editor.wordWrap": "off"
+  },
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  },
+  "[toml]": {
+    "editor.formatOnSave": false
+  }
 }

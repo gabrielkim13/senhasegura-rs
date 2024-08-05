@@ -1,5 +1,5 @@
 [workspace]
-members = ["senhasegura-rs"]
+members = ["senhasegura-js", "senhasegura-rs"]
 resolver = "2"
 
 [profile.release]

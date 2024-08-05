@@ -4,6 +4,7 @@ use crate::{Error, Response, SenhaseguraClient};
 
 /// Disable protected information API response.
 #[derive(serde::Deserialize, Debug)]
+#[cfg_attr(feature = "napi", napi_derive::napi(object))]
 pub struct DisableProtectedInformationAPIResponse {
     /// Response.
     pub response: Response,

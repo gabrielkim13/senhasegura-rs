@@ -12,21 +12,24 @@ homepage = "https://github.com/gabrielkim13/senhasegura-rs"
 anyhow = "1"
 chrono = "0.4"
 http = "1"
+napi = { version = "2", default-features = false, features = ["napi4"], optional = true }
+napi-derive = { version = "2", optional = true }
 oauth2 = { version = "5.0.0-alpha.4", default-features = false, features = ["ureq"] }
 retry = { version = "2", optional = true }
 serde = { version = "1", features = ["derive"] }
 serde-aux = { version = "4", default-features = false }
 serde_json = "1"
 serde_repr = "0.1"
+strum = { version = "0.26", features = ["derive"] }
 thiserror = "1"
 tracing = "0.1"
 ureq = { version = "2", features = ["json", "native-certs"] }
-url = { version = "2", features = ["serde"] }
+url = "2"
 
 [dev-dependencies]
 test-context = "0.3"
 tokio = { version = "1", features = ["test-util"] }
-tracing-subscriber = "0.3"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 wiremock = "0.6"
 
 [features]
@@ -34,3 +37,6 @@ default = ["retry"]
 
 # Enables exponential backoff retry strategy
 retry = ["dep:retry"]
+
+# NAPI-RS bindings for Node.js integration
+napi = ["dep:napi", "dep:napi-derive"]

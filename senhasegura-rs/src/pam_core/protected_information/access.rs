@@ -5,6 +5,7 @@ use crate::{Error, Response, SenhaseguraClient};
 
 /// Access protected information API response.
 #[derive(serde::Deserialize, Debug)]
+#[cfg_attr(feature = "napi", napi_derive::napi(object))]
 pub struct AccessProtectedInformationAPIResponse {
     /// Response.
     pub response: Response,
@@ -15,6 +16,7 @@ pub struct AccessProtectedInformationAPIResponse {
 
 /// Access protected information result (i.e. "info") field.
 #[derive(serde::Deserialize, Debug)]
+#[cfg_attr(feature = "napi", napi_derive::napi(object))]
 pub struct AccessProtectedInformationResult {
     /// Protected information item ’s unique identification code.
     #[serde(deserialize_with = "deserialize_number_from_string")]
