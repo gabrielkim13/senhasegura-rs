@@ -7,7 +7,7 @@
 //! # Example
 //!
 //! ```no_run
-//! use senhasegura_rs::{AccessProtectedInformationAPI, SenhaseguraClient};
+//! use senhasegura_rs::{AccessProtectedInformationApi, SenhaseguraClient};
 //!
 //! # fn main() -> anyhow::Result<()> {
 //! let base_url = "https://senhasegura.acme.com".parse()?;
