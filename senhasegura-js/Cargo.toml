@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 publish = true
 authors = ["Gabriel Kim<gabrielkim13@gmail.com>"]
-description = "Senhasegura API client for Rust"
+description = "Senhasegura API client for Node.js"
 repository = "https://github.com/gabrielkim13/senhasegura-rs"
 homepage = "https://github.com/gabrielkim13/senhasegura-rs"
 
@@ -16,9 +16,9 @@ path = "../senhasegura-rs"
 features = ["napi"]
 
 [dependencies]
-napi = { version = "2", default-features = false, features = ["napi4"] }
+napi = { version = "2", default-features = false, features = ["async", "napi4"] }
 napi-derive = "2"
 url = "2"
 
 [build-dependencies]
-napi-build = "2.0.1"
+napi-build = "2"

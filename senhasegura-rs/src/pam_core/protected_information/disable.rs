@@ -15,7 +15,8 @@ pub struct DisableProtectedInformationApiResponse {
 /// See [Disable protected information](https://docs.senhasegura.io/docs/a2a-pam-core-disable-protected-information).
 pub trait DisableProtectedInformationApi {
     /// Disables the protected information item.
-    fn disable_protected_information(
+    #[allow(async_fn_in_trait)]
+    async fn disable_protected_information(
         &self,
         id: String,
     ) -> Result<DisableProtectedInformationApiResponse, Error>;
@@ -23,10 +24,11 @@ pub trait DisableProtectedInformationApi {
 
 impl DisableProtectedInformationApi for SenhaseguraClient {
     #[tracing::instrument(level = "info", skip(self), err)]
-    fn disable_protected_information(
+    async fn disable_protected_information(
         &self,
         id: String,
     ) -> Result<DisableProtectedInformationApiResponse, Error> {
-        self.do_api_operation(Method::DELETE, &format!("iso/pam/info/{id}"), None::<()>)
+        self.do_api_request(Method::DELETE, format!("iso/pam/info/{id}"), None::<()>)
+            .await
     }
 }

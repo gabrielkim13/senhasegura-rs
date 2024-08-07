@@ -14,8 +14,7 @@ chrono = "0.4"
 http = "1"
 napi = { version = "2", default-features = false, features = ["napi4"], optional = true }
 napi-derive = { version = "2", optional = true }
-oauth2 = { version = "5.0.0-alpha.4", default-features = false, features = ["ureq"] }
-retry = { version = "2", optional = true }
+oauth2 = { version = "5.0.0-alpha.4", default-features = false, features = ["rustls-tls"] }
 serde = { version = "1", features = ["derive"] }
 serde-aux = { version = "4", default-features = false }
 serde_json = "1"
@@ -23,12 +22,16 @@ serde_repr = "0.1"
 strum = { version = "0.26", features = ["derive"] }
 thiserror = "1"
 tracing = "0.1"
-ureq = { version = "2", features = ["json", "native-certs"] }
+reqwest = { version = "0.12", default-features = false, features = ["http2", "rustls-tls", "rustls-tls-native-roots", "charset", "gzip", "json" ] }
+reqwest-middleware = { version = "0.3", features = ["charset", "http2", "json", "rustls-tls"], optional = true }
+reqwest-retry = { version = "0.6", optional = true }
+tokio = { version = "1", features = ["sync"] }
 url = "2"
 
 [dev-dependencies]
 test-context = "0.3"
 tokio = { version = "1", features = ["test-util"] }
+tokio-test = "0.4"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 wiremock = "0.6"
 
@@ -36,7 +39,7 @@ wiremock = "0.6"
 default = ["retry"]
 
 # Enables exponential backoff retry strategy
-retry = ["dep:retry"]
+retry = ["dep:reqwest-middleware", "dep:reqwest-retry"]
 
 # NAPI-RS bindings for Node.js integration
 napi = ["dep:napi", "dep:napi-derive"]

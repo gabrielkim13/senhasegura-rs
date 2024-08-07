@@ -16,7 +16,7 @@ pub enum Error {
     ///
     /// This error occurs when a request to the API is unsuccessful (e.g. network error).
     #[error(transparent)]
-    Transport(#[from] Box<ureq::Transport>),
+    Transport(reqwest::Error),
 
     /// Other error.
     ///
@@ -42,6 +42,28 @@ impl std::fmt::Display for ApiError {
 }
 
 impl std::error::Error for ApiError {}
+
+impl From<reqwest::Error> for Error {
+    fn from(err: reqwest::Error) -> Self {
+        if err.is_connect() {
+            Self::Transport(err)
+        } else {
+            Self::Other(err.into())
+        }
+    }
+}
+
+#[cfg(feature = "retry")]
+impl From<reqwest_middleware::Error> for Error {
+    fn from(err: reqwest_middleware::Error) -> Self {
+        use reqwest_middleware::Error::*;
+
+        match err {
+            Middleware(e) => Self::Other(e),
+            Reqwest(e) => e.into(),
+        }
+    }
+}
 
 impl From<url::ParseError> for Error {
     fn from(err: url::ParseError) -> Self {

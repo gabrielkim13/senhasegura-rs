@@ -37,7 +37,8 @@ pub struct AccessProtectedInformationResult {
 /// See [Access protected information](https://docs.senhasegura.io/docs/a2a-pam-core-access-protected-information).
 pub trait AccessProtectedInformationApi {
     /// Returns the protected information item.
-    fn access_protected_information(
+    #[allow(async_fn_in_trait)]
+    async fn access_protected_information(
         &self,
         id: i32,
     ) -> Result<AccessProtectedInformationApiResponse, Error>;
@@ -45,10 +46,11 @@ pub trait AccessProtectedInformationApi {
 
 impl AccessProtectedInformationApi for SenhaseguraClient {
     #[tracing::instrument(level = "info", skip(self), err)]
-    fn access_protected_information(
+    async fn access_protected_information(
         &self,
         id: i32,
     ) -> Result<AccessProtectedInformationApiResponse, Error> {
-        self.do_api_operation(Method::GET, &format!("iso/pam/info/{id}"), None::<()>)
+        self.do_api_request(Method::GET, &format!("iso/pam/info/{id}"), None::<()>)
+            .await
     }
 }

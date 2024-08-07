@@ -22,7 +22,7 @@ pub struct SenhaseguraClientProps {
     /// Base delay of the exponential backoff retry policy, in milliseconds.
     pub base_retry_delay: Option<u32>,
     /// Maximum number of retries.
-    pub max_retries: Option<u32>,
+    pub max_n_retries: Option<u32>,
 }
 
 /// Senhasegura API client.
@@ -36,7 +36,7 @@ impl SenhaseguraClient {
     /// Creates a new Senhasegura API client.
     #[napi(factory)]
     pub fn create(props: SenhaseguraClientProps) -> napi::Result<Self> {
-        let base_url = Url::parse(&props.base_url).map_err(Self::map_url_parse_error)?;
+        let base_url = Url::parse(&props.base_url).map_err(Self::map_error)?;
 
         let mut builder = senhasegura_rs::SenhaseguraClientBuilder::new(
             base_url,
@@ -49,21 +49,20 @@ impl SenhaseguraClient {
                 builder.request_timeout(std::time::Duration::from_secs(request_timeout as u64));
         }
 
-        if let Some(base_retry_delay) = props.base_retry_delay {
-            builder =
-                builder.base_retry_delay(std::time::Duration::from_secs(base_retry_delay as u64));
+        if let Some(base_retry_delay_secs) = props.base_retry_delay {
+            builder = builder.base_retry_delay_secs(base_retry_delay_secs);
         }
 
-        if let Some(max_retries) = props.max_retries {
-            builder = builder.max_retries(max_retries as usize);
+        if let Some(max_n_retries) = props.max_n_retries {
+            builder = builder.max_n_retries(max_n_retries);
         }
 
         Ok(Self {
-            client: builder.build().map_err(Self::map_url_parse_error)?,
+            client: builder.build().map_err(Self::map_error)?,
         })
     }
 
-    fn map_url_parse_error(error: url::ParseError) -> napi::Error {
+    fn map_error(error: impl std::error::Error) -> napi::Error {
         napi::Error::from_reason(error.to_string())
     }
 }

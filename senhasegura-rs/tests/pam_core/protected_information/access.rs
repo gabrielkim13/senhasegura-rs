@@ -42,7 +42,11 @@ async fn test_access_protected_information(fixture: &mut Fixture) {
         .mount(fixture.server())
         .await;
 
-    let response = fixture.client().access_protected_information(id).unwrap();
+    let response = fixture
+        .client()
+        .access_protected_information(id)
+        .await
+        .unwrap();
 
     assert_eq!(response.info.id, id);
     assert_eq!(
@@ -81,6 +85,7 @@ async fn test_access_protected_information_not_found(fixture: &mut Fixture) {
     let response = fixture
         .client()
         .access_protected_information(id)
+        .await
         .unwrap_err();
 
     if let Error::Api(api_error) = response {
@@ -135,6 +140,7 @@ async fn test_access_protected_information_unknown_exception(fixture: &mut Fixtu
     let response = fixture
         .client()
         .access_protected_information(id)
+        .await
         .unwrap_err();
 
     if let Error::Api(api_error) = response {

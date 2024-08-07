@@ -30,5 +30,9 @@ async fn test_disable_protected_information(fixture: &mut Fixture) {
         .mount(fixture.server())
         .await;
 
-    fixture.client().disable_protected_information(id).unwrap();
+    fixture
+        .client()
+        .disable_protected_information(id)
+        .await
+        .unwrap();
 }

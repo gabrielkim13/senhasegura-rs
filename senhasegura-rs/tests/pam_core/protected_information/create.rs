@@ -54,6 +54,7 @@ async fn test_create_protected_information(fixture: &mut Fixture) {
             identifier: Some("INFOSAASVAULT1".to_string()),
             r#type: Some("access Credential".to_string()),
         })
+        .await
         .unwrap();
 
     assert_eq!(response.info.identifier.unwrap(), "INFOSAASVAULT1");
