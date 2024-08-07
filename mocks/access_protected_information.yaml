@@ -1,0 +1,31 @@
+when:
+  method: GET
+  path: /iso/pam/info/28
+  header:
+    - name: authorization
+      value: Bearer access_token
+
+then:
+  status: 201
+  header:
+    - name: content-type
+      value: application/json
+  body: |-
+    {
+      "response": {
+        "status": 200,
+        "message": "Information 28",
+        "error": false,
+        "error_code": 0,
+        "detail": "",
+        "mensagem": "Information 28",
+        "erro": false,
+        "cod_erro": 0
+      },
+      "info": {
+        "id": "28",
+        "tag": null,
+        "type": "Access credential",
+        "content": "hdjskasdhdj2789208/3\\G+H-J_K'#JK\"NAOAPARECE\"JSJSJSJS"
+      }
+    }

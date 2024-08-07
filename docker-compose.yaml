@@ -1,0 +1,11 @@
+services:
+  httpmock:
+    image: alexliesenfeld/httpmock
+    environment:
+      - RUST_LOG=debug
+      - HTTPMOCK_PORT=5000
+      - HTTPMOCK_MOCK_FILES_DIR=/mocks
+    ports:
+      - 5000:5000
+    volumes:
+      - ./mocks:/mocks

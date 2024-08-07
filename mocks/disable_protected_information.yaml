@@ -1,0 +1,22 @@
+when:
+  method: DELETE
+  path: /iso/pam/info/1
+  header:
+    - name: authorization
+      value: Bearer access_token
+
+then:
+  status: 200
+  header:
+    - name: content-type
+      value: application/json
+  body: |-
+    {
+      "response": {
+        "status": 200,
+        "mensagem": "Information successfully disabled",
+        "erro": false,
+        "message": "Information successfully disabled",
+        "error": false
+      }
+    }

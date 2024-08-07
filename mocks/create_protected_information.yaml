@@ -1,0 +1,33 @@
+when:
+  method: POST
+  path: /iso/pam/info
+  header:
+    - name: authorization
+      value: Bearer access_token
+    - name: content-type
+      value: application/json
+
+then:
+  status: 201
+  header:
+    - name: content-type
+      value: application/json
+  body: |-
+    {
+      "response": {
+        "status": 201,
+        "mensagem": "Information successfully registered!",
+        "erro": false,
+        "message": "Information successfully registered!",
+        "error": false
+      },
+      "info": {
+        "name": "saas_vault1",
+        "type": "access credential",
+        "service": "saas_client",
+        "url": "10.10.10.2",
+        "content": "login: mt4adm, password: mt4admp4ss",
+        "users_allowed": "admin, account_manager, mscharra",
+        "identifier": "INFOSAASVAULT1"
+      }
+    }
