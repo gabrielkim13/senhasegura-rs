@@ -1,3 +1,4 @@
+use async_trait::async_trait;
 use http::Method;
 
 use crate::{Error, Response, SenhaseguraClient};
@@ -5,6 +6,7 @@ use crate::{Error, Response, SenhaseguraClient};
 /// Create protected information API request.
 #[derive(serde::Serialize, Debug)]
 #[cfg_attr(feature = "napi", napi_derive::napi(object))]
+#[cfg_attr(feature = "uniffi", derive(uniffi::Record))]
 pub struct CreateProtectedInformationApiRequest {
     /// Name assigned to the protected item.
     pub name: Option<String>,
@@ -22,6 +24,7 @@ pub struct CreateProtectedInformationApiRequest {
 /// Create protected information API response.
 #[derive(serde::Deserialize, Debug)]
 #[cfg_attr(feature = "napi", napi_derive::napi(object))]
+#[cfg_attr(feature = "uniffi", derive(uniffi::Record))]
 pub struct CreateProtectedInformationApiResponse {
     /// Response.
     pub response: Response,
@@ -33,6 +36,7 @@ pub struct CreateProtectedInformationApiResponse {
 /// Create protected information result (i.e. "info") field.
 #[derive(serde::Deserialize, Debug)]
 #[cfg_attr(feature = "napi", napi_derive::napi(object))]
+#[cfg_attr(feature = "uniffi", derive(uniffi::Record))]
 pub struct CreateProtectedInformationResult {
     /// Name assigned to the protected item.
     pub name: Option<String>,
@@ -59,15 +63,16 @@ pub struct CreateProtectedInformationResult {
 /// Trait to create protected information.
 ///
 /// See [Create protected information](https://docs.senhasegura.io/docs/a2a-pam-core-create-protected-information).
-pub trait CreateProtectedInformationApi {
+#[async_trait]
+pub trait CreateProtectedInformationApi: Send + Sync {
     /// Creates a protected information item.
-    #[allow(async_fn_in_trait)]
     async fn create_protected_information(
         &self,
         request: CreateProtectedInformationApiRequest,
     ) -> Result<CreateProtectedInformationApiResponse, Error>;
 }
 
+#[async_trait]
 impl CreateProtectedInformationApi for SenhaseguraClient {
     #[tracing::instrument(level = "info", skip(self), err)]
     async fn create_protected_information(
@@ -76,5 +81,25 @@ impl CreateProtectedInformationApi for SenhaseguraClient {
     ) -> Result<CreateProtectedInformationApiResponse, Error> {
         self.do_api_request(Method::POST, "iso/pam/info", Some(request))
             .await
+    }
+}
+
+#[cfg(feature = "uniffi")]
+mod senhasegura_uniffi {
+    use super::*;
+
+    #[uniffi::export]
+    impl SenhaseguraClient {
+        /// Creates a protected information item.
+        fn create_protected_information(
+            &self,
+            request: CreateProtectedInformationApiRequest,
+        ) -> Result<CreateProtectedInformationApiResponse, Error> {
+            self.async_runtime.block_on(
+                <Self as CreateProtectedInformationApi>::create_protected_information(
+                    self, request,
+                ),
+            )
+        }
     }
 }

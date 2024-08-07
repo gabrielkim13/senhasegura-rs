@@ -24,6 +24,7 @@
 //! ```
 
 #![warn(missing_docs)]
+#![allow(clippy::blocks_in_conditions)] // For `async-trait`
 
 mod auth;
 use auth::*;
@@ -53,7 +54,8 @@ pub trait SenhaseguraApi: PAMCoreApi {}
 impl<T> SenhaseguraApi for T where T: PAMCoreApi {}
 
 /// Senhasegura API client.
-#[derive(Clone, Debug)]
+#[derive(Debug)]
+#[cfg_attr(feature = "uniffi", derive(uniffi::Object))]
 pub struct SenhaseguraClient {
     base_url: Url,
 
@@ -64,6 +66,9 @@ pub struct SenhaseguraClient {
 
     oauth2_client: OAuth2Client,
     auth_ctx: Arc<Mutex<Option<AuthContext>>>,
+
+    #[cfg(feature = "uniffi")]
+    async_runtime: tokio::runtime::Runtime,
 }
 
 impl SenhaseguraClient {
@@ -224,6 +229,37 @@ impl SenhaseguraClientBuilder {
 
             oauth2_client,
             auth_ctx: Default::default(),
+
+            #[cfg(feature = "uniffi")]
+            async_runtime: tokio::runtime::Builder::new_multi_thread()
+                .enable_all()
+                .build()?,
         })
     }
 }
+
+#[cfg(feature = "uniffi")]
+mod senhasegura_uniffi {
+    use super::*;
+
+    uniffi::setup_scaffolding!("senhasegura");
+
+    #[uniffi::export]
+    impl SenhaseguraClient {
+        /// Creates a new Senhasegura API client.
+        #[uniffi::constructor]
+        fn new(
+            base_url: String,
+            client_id: String,
+            client_secret: String,
+        ) -> Result<Arc<SenhaseguraClient>, Error> {
+            let client = SenhaseguraClientBuilder::new(base_url.parse()?, client_id, client_secret)
+                .build()?;
+
+            Ok(Arc::new(client))
+        }
+    }
+}
+
+#[cfg(feature = "uniffi")]
+pub use senhasegura_uniffi::*;

@@ -4,6 +4,8 @@ use crate::{Exception, Response};
 
 /// Errors that can occur when interacting with Senhasegura's API.
 #[derive(thiserror::Error, Debug)]
+#[cfg_attr(feature = "uniffi", derive(uniffi::Error))]
+#[cfg_attr(feature = "uniffi", uniffi(flat_error))]
 pub enum Error {
     /// API error.
     ///
@@ -27,6 +29,7 @@ pub enum Error {
 
 /// API error response.
 #[derive(serde::Deserialize, Debug)]
+#[cfg_attr(feature = "uniffi", derive(uniffi::Record))]
 pub struct ApiError {
     /// Response.
     pub response: Response,

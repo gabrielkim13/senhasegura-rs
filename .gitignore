@@ -1015,3 +1015,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/c,c++,csharp,git,go,jetbrains,linux,macos,node,python,rust,visualstudiocode,windows
+
+bindings/**/*
+!bindings/.gitkeep

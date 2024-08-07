@@ -6,6 +6,9 @@ use crate::PAMCoreExceptionCode;
 #[derive(Debug)]
 pub struct StatusCode(http::StatusCode);
 
+#[cfg(feature = "uniffi")]
+uniffi::custom_type!(StatusCode, u16);
+
 impl std::ops::Deref for StatusCode {
     type Target = http::StatusCode;
 
@@ -50,6 +53,7 @@ impl<'de> serde::Deserialize<'de> for StatusCode {
 /// Response (i.e. "response") field.
 #[derive(serde::Deserialize, Debug)]
 #[cfg_attr(feature = "napi", napi_derive::napi(object))]
+#[cfg_attr(feature = "uniffi", derive(uniffi::Record))]
 pub struct Response {
     /// HTTP status code.
     pub status: StatusCode,
@@ -72,9 +76,13 @@ pub enum ExceptionCode {
     Unknown(u16),
 }
 
+#[cfg(feature = "uniffi")]
+uniffi::custom_type!(ExceptionCode, u16);
+
 /// Exception (i.e. "exception") field.
 #[derive(serde::Deserialize, Debug)]
 #[cfg_attr(feature = "napi", napi_derive::napi(object))]
+#[cfg_attr(feature = "uniffi", derive(uniffi::Record))]
 pub struct Exception {
     /// Exception code.
     pub code: ExceptionCode,
@@ -161,4 +169,55 @@ mod senhasegura_js {
     }
 
     impl ValidateNapiValue for ExceptionCode {}
+}
+
+#[cfg(feature = "uniffi")]
+mod senhasegura_uniffi {
+    use anyhow::anyhow;
+
+    use crate::UniffiCustomTypeConverter;
+
+    use super::*;
+
+    impl UniffiCustomTypeConverter for StatusCode {
+        type Builtin = u16;
+
+        fn into_custom(val: Self::Builtin) -> uniffi::Result<Self> {
+            http::StatusCode::from_u16(val)
+                .map(StatusCode)
+                .map_err(|e| anyhow!(e))
+        }
+
+        fn from_custom(obj: Self) -> Self::Builtin {
+            obj.0.as_u16()
+        }
+    }
+
+    impl UniffiCustomTypeConverter for ExceptionCode {
+        type Builtin = u16;
+
+        fn into_custom(val: Self::Builtin) -> uniffi::Result<Self> {
+            use crate::ProtectedInformationExceptionCode;
+
+            use super::{ExceptionCode::*, PAMCoreExceptionCode::*};
+
+            let exception_code =
+                if let Some(code) = ProtectedInformationExceptionCode::from_repr(val) {
+                    PAMCore(ProtectedInformation(code))
+                } else {
+                    Unknown(val)
+                };
+
+            Ok(exception_code)
+        }
+
+        fn from_custom(obj: Self) -> Self::Builtin {
+            use super::{ExceptionCode::*, PAMCoreExceptionCode::*};
+
+            match obj {
+                PAMCore(ProtectedInformation(code)) => code as u16,
+                Unknown(code) => code,
+            }
+        }
+    }
 }

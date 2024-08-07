@@ -8,8 +8,16 @@ description = "Senhasegura API client for Rust"
 repository = "https://github.com/gabrielkim13/senhasegura-rs"
 homepage = "https://github.com/gabrielkim13/senhasegura-rs"
 
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "uniffi-bindgen.rs"
+
 [dependencies]
 anyhow = "1"
+async-trait = "0.1"
 chrono = "0.4"
 http = "1"
 napi = { version = "2", default-features = false, features = ["napi4"], optional = true }
@@ -26,6 +34,7 @@ reqwest = { version = "0.12", default-features = false, features = ["http2", "ru
 reqwest-middleware = { version = "0.3", features = ["charset", "http2", "json", "rustls-tls"], optional = true }
 reqwest-retry = { version = "0.6", optional = true }
 tokio = { version = "1", features = ["sync"] }
+uniffi = { version = "0.25.0", features = ["cli"], optional = true }
 url = "2"
 
 [dev-dependencies]
@@ -43,3 +52,6 @@ retry = ["dep:reqwest-middleware", "dep:reqwest-retry"]
 
 # NAPI-RS bindings for Node.js integration
 napi = ["dep:napi", "dep:napi-derive"]
+
+# UniFFI bindings
+uniffi = ["dep:uniffi", "tokio/rt-multi-thread"]
