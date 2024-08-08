@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 publish = true
 authors = ["Gabriel Kim<gabrielkim13@gmail.com>"]
+license = "MIT"
 description = "Senhasegura API client for Node.js"
 repository = "https://github.com/gabrielkim13/senhasegura-rs"
 homepage = "https://github.com/gabrielkim13/senhasegura-rs"

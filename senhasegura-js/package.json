@@ -1,23 +1,16 @@
 {
   "name": "senhasegura-js",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Senhasegura API client for Node.js",
+  "keywords": [
+    "senhasegura"
+  ],
+  "homepage": "https://github.com/gabrielkim13/senhasegura-rs",
+  "license": "MIT",
+  "author": "Gabriel Kim <gabrielkim13@gmail.com> (https://github.com/gabrielkim13)",
   "main": "index.js",
   "types": "index.d.ts",
-  "napi": {
-    "name": "senhasegura-js",
-    "triples": {}
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "@napi-rs/cli": "^2.18.4",
-    "ava": "^6.0.1"
-  },
-  "ava": {
-    "timeout": "3m"
-  },
-  "engines": {
-    "node": ">= 10"
-  },
+  "repository": "github:gabrielkim13/senhasegura-rs",
   "scripts": {
     "artifacts": "napi artifacts",
     "build": "napi build --platform --release",
@@ -27,5 +20,24 @@
     "universal": "napi universal",
     "version": "napi version"
   },
-  "packageManager": "yarn@4.4.0"
+  "devDependencies": {
+    "@napi-rs/cli": "^2.18.4",
+    "ava": "^6.0.1"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "ava": {
+    "timeout": "3m"
+  },
+  "napi": {
+    "name": "senhasegura-js",
+    "triples": {}
+  },
+  "packageManager": "yarn@4.4.0",
+  "optionalDependencies": {
+    "senhasegura-js-win32-x64-msvc": "0.1.0",
+    "senhasegura-js-darwin-x64": "0.1.0",
+    "senhasegura-js-linux-x64-gnu": "0.1.0"
+  }
 }
