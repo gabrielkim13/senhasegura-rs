@@ -59,6 +59,27 @@ impl AccessProtectedInformationApi for SenhaseguraClient {
     }
 }
 
+#[cfg(feature = "napi")]
+mod senhasegura_js {
+    use napi_derive::napi;
+
+    use super::*;
+
+    #[napi]
+    impl SenhaseguraClient {
+        /// Returns the protected information item.
+        #[napi(js_name = accessProtectedInformation)]
+        pub async fn js_access_protected_information(
+            &self,
+            id: i32,
+        ) -> napi::Result<AccessProtectedInformationApiResponse> {
+            <Self as AccessProtectedInformationApi>::access_protected_information(self, id)
+                .await
+                .map_err(Into::into)
+        }
+    }
+}
+
 #[cfg(feature = "uniffi")]
 mod senhasegura_uniffi {
     use super::*;

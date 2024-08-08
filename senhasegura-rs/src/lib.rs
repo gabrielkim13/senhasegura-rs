@@ -23,7 +23,6 @@
 //! # });
 //! ```
 
-#![warn(missing_docs)]
 #![allow(clippy::blocks_in_conditions)] // For `async-trait`
 
 mod auth;
@@ -55,6 +54,7 @@ impl<T> SenhaseguraApi for T where T: PAMCoreApi {}
 
 /// Senhasegura API client.
 #[derive(Debug)]
+#[cfg_attr(feature = "napi", napi_derive::napi)]
 #[cfg_attr(feature = "uniffi", derive(uniffi::Object))]
 pub struct SenhaseguraClient {
     base_url: Url,
@@ -235,6 +235,60 @@ impl SenhaseguraClientBuilder {
                 .enable_all()
                 .build()?,
         })
+    }
+}
+
+#[cfg(feature = "napi")]
+mod senhasegura_js {
+    use super::*;
+
+    use napi_derive::napi;
+
+    /// Senhasegura API client options.
+    #[napi(object)]
+    pub struct SenhaseguraClientProps {
+        /// Base URL of the Senhasegura API.
+        pub base_url: String,
+
+        /// Request timeout, in seconds.
+        pub request_timeout: Option<u32>,
+
+        /// OAuth2 client credentials ID.
+        pub client_id: String,
+        /// OAuth2 client credentials secret.
+        pub client_secret: String,
+
+        /// Base delay of the exponential backoff retry policy, in milliseconds.
+        pub base_retry_delay: Option<u32>,
+        /// Maximum number of retries.
+        pub max_n_retries: Option<u32>,
+    }
+
+    #[napi]
+    impl SenhaseguraClient {
+        /// Creates a new Senhasegura API client.
+        #[napi(factory)]
+        pub fn create(props: SenhaseguraClientProps) -> Result<Self, Error> {
+            let base_url = Url::parse(&props.base_url)?;
+
+            let mut builder =
+                SenhaseguraClientBuilder::new(base_url, props.client_id, props.client_secret);
+
+            if let Some(request_timeout) = props.request_timeout {
+                builder =
+                    builder.request_timeout(std::time::Duration::from_secs(request_timeout as u64));
+            }
+
+            if let Some(base_retry_delay_secs) = props.base_retry_delay {
+                builder = builder.base_retry_delay_secs(base_retry_delay_secs);
+            }
+
+            if let Some(max_n_retries) = props.max_n_retries {
+                builder = builder.max_n_retries(max_n_retries);
+            }
+
+            builder.build()
+        }
     }
 }
 

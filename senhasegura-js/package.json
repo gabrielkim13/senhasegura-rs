@@ -20,9 +20,8 @@
   },
   "scripts": {
     "artifacts": "napi artifacts",
-    "build": "napi build --platform --release && yarn build:patch",
-    "build:debug": "napi build --platform && yarn build:patch",
-    "build:patch": "echo 'export type StatusCode = number;' >> index.d.ts && echo 'export type ExceptionCode = number;' >> index.d.ts",
+    "build": "napi build --platform --release",
+    "build:debug": "napi build --platform",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "ava",
     "universal": "napi universal",

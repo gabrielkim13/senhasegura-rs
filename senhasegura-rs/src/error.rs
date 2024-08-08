@@ -29,6 +29,7 @@ pub enum Error {
 
 /// API error response.
 #[derive(serde::Deserialize, Debug)]
+#[cfg_attr(feature = "napi", napi_derive::napi(object))]
 #[cfg_attr(feature = "uniffi", derive(uniffi::Record))]
 pub struct ApiError {
     /// Response.
@@ -82,11 +83,91 @@ impl From<io::Error> for Error {
 
 #[cfg(feature = "napi")]
 mod senhasegura_js {
-    use super::*;
+    use anyhow::anyhow;
+    use napi::bindgen_prelude::*;
 
-    impl From<Error> for napi::Error {
-        fn from(value: Error) -> Self {
-            napi::Error::from_reason(value.to_string())
+    use super::ApiError;
+
+    impl TypeName for super::Error {
+        fn type_name() -> &'static str {
+            "Error"
+        }
+
+        fn value_type() -> ValueType {
+            ValueType::Object
+        }
+    }
+
+    impl ToNapiValue for super::Error {
+        unsafe fn to_napi_value(env: sys::napi_env, value: Self) -> napi::Result<sys::napi_value> {
+            use super::Error::*;
+
+            let env_wrapper = Env::from(env);
+
+            let mut obj = env_wrapper.create_object()?;
+
+            match value {
+                Api(e) => {
+                    obj.set("$type", "ApiError")?;
+                    obj.set("apiError", e)?;
+                }
+                Transport(e) => {
+                    obj.set("$type", "Transport")?;
+                    obj.set("transport", e.to_string())?;
+                }
+                Other(e) => {
+                    obj.set("$type", "Other")?;
+                    obj.set("other", e.to_string())?;
+                }
+            }
+
+            napi::bindgen_prelude::Object::to_napi_value(env, obj)
+        }
+    }
+
+    impl FromNapiValue for super::Error {
+        unsafe fn from_napi_value(
+            env: sys::napi_env,
+            nvalue: sys::napi_value,
+        ) -> napi::Result<Self> {
+            let obj = Object::from_napi_value(env, nvalue)?;
+
+            if let Some(error) = obj.get::<_, ApiError>("apiError")? {
+                return Ok(super::Error::Api(error));
+            }
+
+            // Unfortunately, we can't restore the original error type, from reqwest.
+            //
+            // However, it's not very usual to convert a JS error back to a Rust error.
+            if let Some(message) = obj.get::<_, String>("transport")? {
+                let error = anyhow!(message);
+
+                return Ok(super::Error::Other(error));
+            }
+
+            if let Some(message) = obj.get::<_, String>("other")? {
+                let error = anyhow!(message);
+
+                return Ok(super::Error::Other(error));
+            }
+
+            Err(napi::Error::from_reason(
+                "Missing fields: apiError | transport | other",
+            ))
+        }
+    }
+
+    impl ValidateNapiValue for super::Error {}
+
+    impl From<super::Error> for napi::Error {
+        fn from(value: super::Error) -> Self {
+            napi::Error::new(Status::GenericFailure, value)
+        }
+    }
+
+    impl From<super::Error> for JsError {
+        fn from(value: super::Error) -> Self {
+            JsError::from(napi::Error::from(value))
         }
     }
 }

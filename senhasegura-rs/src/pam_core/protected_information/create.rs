@@ -84,6 +84,27 @@ impl CreateProtectedInformationApi for SenhaseguraClient {
     }
 }
 
+#[cfg(feature = "napi")]
+mod senhasegura_js {
+    use napi_derive::napi;
+
+    use super::*;
+
+    #[napi]
+    impl SenhaseguraClient {
+        /// Creates a protected information item.
+        #[napi(js_name = createProtectedInformation)]
+        pub async fn js_create_protected_information(
+            &self,
+            request: CreateProtectedInformationApiRequest,
+        ) -> napi::Result<CreateProtectedInformationApiResponse> {
+            <Self as CreateProtectedInformationApi>::create_protected_information(self, request)
+                .await
+                .map_err(Into::into)
+        }
+    }
+}
+
 #[cfg(feature = "uniffi")]
 mod senhasegura_uniffi {
     use super::*;

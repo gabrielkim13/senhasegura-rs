@@ -6,7 +6,7 @@ when:
       value: Bearer access_token
 
 then:
-  status: 201
+  status: 200
   header:
     - name: content-type
       value: application/json

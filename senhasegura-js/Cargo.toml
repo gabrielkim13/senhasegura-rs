@@ -15,10 +15,5 @@ crate-type = ["cdylib"]
 path = "../senhasegura-rs"
 features = ["napi"]
 
-[dependencies]
-napi = { version = "2", default-features = false, features = ["async", "napi4"] }
-napi-derive = "2"
-url = "2"
-
 [build-dependencies]
 napi-build = "2"

@@ -36,6 +36,27 @@ impl DisableProtectedInformationApi for SenhaseguraClient {
     }
 }
 
+#[cfg(feature = "napi")]
+mod senhasegura_js {
+    use napi_derive::napi;
+
+    use super::*;
+
+    #[napi]
+    impl SenhaseguraClient {
+        /// Disables the protected information item.
+        #[napi(js_name = disableProtectedInformation)]
+        pub async fn js_disable_protected_information(
+            &self,
+            id: String,
+        ) -> napi::Result<DisableProtectedInformationApiResponse> {
+            <Self as DisableProtectedInformationApi>::disable_protected_information(self, id)
+                .await
+                .map_err(Into::into)
+        }
+    }
+}
+
 #[cfg(feature = "uniffi")]
 mod senhasegura_uniffi {
     use super::*;

@@ -6,9 +6,6 @@ use crate::PAMCoreExceptionCode;
 #[derive(Debug)]
 pub struct StatusCode(http::StatusCode);
 
-#[cfg(feature = "uniffi")]
-uniffi::custom_type!(StatusCode, u16);
-
 impl std::ops::Deref for StatusCode {
     type Target = http::StatusCode;
 
@@ -50,9 +47,33 @@ impl<'de> serde::Deserialize<'de> for StatusCode {
     }
 }
 
+// TODO: Find a better way to conditionally derive NAPI-RS's traits for `Response` and `Exception`.
+//
+// As of now, cfg_attr doesn't work for attributes of conditional macros, thus we need to duplicate
+// the code for the NAPI-RS feature (i.e. enabled / disabled).
+//
+// See: https://users.rust-lang.org/t/attribute-macro-confusion-in-pyo3/64832.
+
 /// Response (i.e. "response") field.
 #[derive(serde::Deserialize, Debug)]
-#[cfg_attr(feature = "napi", napi_derive::napi(object))]
+#[cfg(feature = "napi")]
+#[cfg_attr(feature = "uniffi", derive(uniffi::Record))]
+#[napi_derive::napi(object)]
+pub struct Response {
+    /// HTTP status code.
+    #[napi(ts_type = "number")]
+    pub status: StatusCode,
+
+    /// Response message.
+    pub message: String,
+
+    /// Flag to indicate whether an error occurred.
+    pub error: bool,
+}
+
+/// Response (i.e. "response") field.
+#[derive(serde::Deserialize, Debug)]
+#[cfg(not(feature = "napi"))]
 #[cfg_attr(feature = "uniffi", derive(uniffi::Record))]
 pub struct Response {
     /// HTTP status code.
@@ -76,12 +97,26 @@ pub enum ExceptionCode {
     Unknown(u16),
 }
 
-#[cfg(feature = "uniffi")]
-uniffi::custom_type!(ExceptionCode, u16);
+/// Exception (i.e. "exception") field.
+#[derive(serde::Deserialize, Debug)]
+#[cfg(feature = "napi")]
+#[napi_derive::napi(object)]
+#[cfg_attr(feature = "uniffi", derive(uniffi::Record))]
+pub struct Exception {
+    /// Exception code.
+    #[napi(ts_type = "number")]
+    pub code: ExceptionCode,
+
+    /// Exception message.
+    pub message: String,
+
+    /// Exception detail.
+    pub detail: Option<String>,
+}
 
 /// Exception (i.e. "exception") field.
 #[derive(serde::Deserialize, Debug)]
-#[cfg_attr(feature = "napi", napi_derive::napi(object))]
+#[cfg(not(feature = "napi"))]
 #[cfg_attr(feature = "uniffi", derive(uniffi::Record))]
 pub struct Exception {
     /// Exception code.
@@ -179,6 +214,8 @@ mod senhasegura_uniffi {
 
     use super::*;
 
+    uniffi::custom_type!(StatusCode, u16);
+
     impl UniffiCustomTypeConverter for StatusCode {
         type Builtin = u16;
 
@@ -192,6 +229,8 @@ mod senhasegura_uniffi {
             obj.0.as_u16()
         }
     }
+
+    uniffi::custom_type!(ExceptionCode, u16);
 
     impl UniffiCustomTypeConverter for ExceptionCode {
         type Builtin = u16;
