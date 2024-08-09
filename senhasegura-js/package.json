@@ -1,6 +1,6 @@
 {
   "name": "senhasegura-js",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Senhasegura API client for Node.js",
   "keywords": [
     "senhasegura"
@@ -39,8 +39,8 @@
   },
   "packageManager": "yarn@4.4.0",
   "optionalDependencies": {
-    "senhasegura-js-win32-x64-msvc": "0.1.1",
-    "senhasegura-js-darwin-x64": "0.1.1",
-    "senhasegura-js-linux-x64-gnu": "0.1.1"
+    "senhasegura-js-win32-x64-msvc": "0.2.1",
+    "senhasegura-js-darwin-x64": "0.2.1",
+    "senhasegura-js-linux-x64-gnu": "0.2.1"
   }
 }
