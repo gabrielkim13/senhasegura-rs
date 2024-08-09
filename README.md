@@ -114,8 +114,7 @@ its bindings. However, C#, Go and C++ bindings require installing third-party _b
 
 ### Installation
 
-> For now, only the Rust library is readily available on the internet, via
-> [crates.io](https://crates.io/).
+> Pending installation instructions for Python, C#, Go and C++...
 
 #### Rust
 
@@ -123,6 +122,10 @@ its bindings. However, C#, Go and C++ bindings require installing third-party _b
 [dependencies]
 senhasegura-rs = "0.1"
 ```
+
+#### Node.js
+
+See [senhasegura-js/README.md](senhasegura-js/README.md).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -147,18 +150,7 @@ println!("{:#?}", client.access_protected_information(28)?);
 
 ### Node.js
 
-```js
-const { SenhaseguraClient } = require('senhasegura-js');
-
-const client = SenhaseguraClient.create({
-  baseUrl: "https://senhasegura.acme.com",
-  clientId: "client_id",
-  clientSecret: "client_secret",
-});
-
-const result = await client.accessProtectedInformation(28);
-console.log(result);
-```
+See [senhasegura-js/README.md](senhasegura-js/README.md).
 
 _For more examples, please refer to the [Documentation](https://docs.rs/senhasegura-rs/latest/senhasegura-rs)_
 

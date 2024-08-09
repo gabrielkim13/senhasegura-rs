@@ -1,6 +1,6 @@
 [package]
 name = "senhasegura-js"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 publish = true
 authors = ["Gabriel Kim<gabrielkim13@gmail.com>"]

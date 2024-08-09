@@ -66,9 +66,6 @@ pub struct SenhaseguraClient {
 
     oauth2_client: OAuth2Client,
     auth_ctx: Arc<Mutex<Option<AuthContext>>>,
-
-    #[cfg(feature = "uniffi")]
-    async_runtime: tokio::runtime::Runtime,
 }
 
 impl SenhaseguraClient {
@@ -229,11 +226,6 @@ impl SenhaseguraClientBuilder {
 
             oauth2_client,
             auth_ctx: Default::default(),
-
-            #[cfg(feature = "uniffi")]
-            async_runtime: tokio::runtime::Builder::new_multi_thread()
-                .enable_all()
-                .build()?,
         })
     }
 }
@@ -294,6 +286,9 @@ mod senhasegura_js {
 
 #[cfg(feature = "uniffi")]
 mod senhasegura_uniffi {
+    use once_cell::sync::OnceCell;
+    use tokio::runtime::{Handle, Runtime};
+
     use super::*;
 
     uniffi::setup_scaffolding!("senhasegura");
@@ -311,6 +306,29 @@ mod senhasegura_uniffi {
                 .build()?;
 
             Ok(Arc::new(client))
+        }
+    }
+
+    impl SenhaseguraClient {
+        pub(crate) fn async_runtime(&self) -> Result<Handle, Error> {
+            static RUNTIME: OnceCell<Runtime> = OnceCell::new();
+
+            // This shouldn't really happen in real-world scenarios, but we might enable the
+            // `uniffi` feature during tests, which will already have its own async runtime.
+            //
+            // In this case, we need to return a handle to the current runtime instead of creating a
+            // new one.
+            let handle = Handle::try_current().or_else(|_| {
+                RUNTIME
+                    .get_or_try_init(|| {
+                        tokio::runtime::Builder::new_multi_thread()
+                            .enable_all()
+                            .build()
+                    })
+                    .map(|r| r.handle().clone())
+            })?;
+
+            Ok(handle)
         }
     }
 }

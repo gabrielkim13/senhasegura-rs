@@ -1642,7 +1642,7 @@ dependencies = [
 
 [[package]]
 name = "senhasegura-rs"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1651,6 +1651,7 @@ dependencies = [
  "napi",
  "napi-derive",
  "oauth2",
+ "once_cell",
  "reqwest",
  "reqwest-middleware",
  "reqwest-retry",

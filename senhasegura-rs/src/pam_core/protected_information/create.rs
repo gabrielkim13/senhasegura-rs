@@ -116,7 +116,7 @@ mod senhasegura_uniffi {
             &self,
             request: CreateProtectedInformationApiRequest,
         ) -> Result<CreateProtectedInformationApiResponse, Error> {
-            self.async_runtime.block_on(
+            self.async_runtime()?.block_on(
                 <Self as CreateProtectedInformationApi>::create_protected_information(
                     self, request,
                 ),

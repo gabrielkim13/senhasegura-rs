@@ -68,7 +68,7 @@ mod senhasegura_uniffi {
             &self,
             id: String,
         ) -> Result<DisableProtectedInformationApiResponse, Error> {
-            self.async_runtime.block_on(
+            self.async_runtime()?.block_on(
                 <Self as DisableProtectedInformationApi>::disable_protected_information(self, id),
             )
         }

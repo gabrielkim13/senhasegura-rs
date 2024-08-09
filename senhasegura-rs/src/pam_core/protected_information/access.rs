@@ -91,7 +91,7 @@ mod senhasegura_uniffi {
             &self,
             id: i32,
         ) -> Result<AccessProtectedInformationApiResponse, Error> {
-            self.async_runtime.block_on(
+            self.async_runtime()?.block_on(
                 <Self as AccessProtectedInformationApi>::access_protected_information(self, id),
             )
         }
