@@ -3,6 +3,8 @@ use http::Method;
 
 use crate::{Error, Response, SenhaseguraClient};
 
+use super::ProtectedInformationIdentifier;
+
 /// Disable protected information API response.
 #[derive(serde::Deserialize, Debug)]
 #[cfg_attr(feature = "napi", napi_derive::napi(object))]
@@ -20,7 +22,7 @@ pub trait DisableProtectedInformationApi: Send + Sync {
     /// Disables the protected information item.
     async fn disable_protected_information(
         &self,
-        id: String,
+        id: ProtectedInformationIdentifier,
     ) -> Result<DisableProtectedInformationApiResponse, Error>;
 }
 
@@ -29,7 +31,7 @@ impl DisableProtectedInformationApi for SenhaseguraClient {
     #[tracing::instrument(level = "info", skip(self), err)]
     async fn disable_protected_information(
         &self,
-        id: String,
+        id: ProtectedInformationIdentifier,
     ) -> Result<DisableProtectedInformationApiResponse, Error> {
         self.do_api_request(Method::DELETE, format!("iso/pam/info/{id}"), None::<()>)
             .await
@@ -48,9 +50,9 @@ mod senhasegura_js {
         #[napi(js_name = disableProtectedInformation)]
         pub async fn js_disable_protected_information(
             &self,
-            id: String,
+            id: napi::Either<i32, String>,
         ) -> napi::Result<DisableProtectedInformationApiResponse> {
-            <Self as DisableProtectedInformationApi>::disable_protected_information(self, id)
+            <Self as DisableProtectedInformationApi>::disable_protected_information(self, id.into())
                 .await
                 .map_err(Into::into)
         }
@@ -69,7 +71,10 @@ mod senhasegura_uniffi {
             id: String,
         ) -> Result<DisableProtectedInformationApiResponse, Error> {
             self.async_runtime()?.block_on(
-                <Self as DisableProtectedInformationApi>::disable_protected_information(self, id),
+                <Self as DisableProtectedInformationApi>::disable_protected_information(
+                    self,
+                    id.into(),
+                ),
             )
         }
     }

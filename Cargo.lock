@@ -1634,7 +1634,7 @@ dependencies = [
 
 [[package]]
 name = "senhasegura-js"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "napi-build",
  "senhasegura-rs",
@@ -1642,7 +1642,7 @@ dependencies = [
 
 [[package]]
 name = "senhasegura-rs"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "async-trait",

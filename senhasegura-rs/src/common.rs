@@ -69,6 +69,9 @@ pub struct Response {
 
     /// Flag to indicate whether an error occurred.
     pub error: bool,
+
+    /// Error code.
+    pub error_code: i32,
 }
 
 /// Response (i.e. "response") field.

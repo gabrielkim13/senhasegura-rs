@@ -15,6 +15,8 @@ pub struct CreateProtectedInformationApiRequest {
     pub content: String,
 
     /// Unique string to identify the protected item.
+    ///
+    /// See [ProtectedInformationIdentifier](super::ProtectedInformationIdentifier).
     pub identifier: Option<String>,
 
     /// Information type.
@@ -44,16 +46,16 @@ pub struct CreateProtectedInformationResult {
     /// Information type.
     pub r#type: Option<String>,
 
-    /// TODO: What is this?
+    /// Name of the service associated to the information.
     pub service: Option<String>,
 
-    /// TODO: What is this?
+    /// URL associated to the information.
     pub url: Option<String>,
 
     /// Information you wish to protect.
     pub content: String,
 
-    /// TODO: What is this?
+    /// Comma-separated ACL of users / groups.
     pub users_allowed: Option<String>,
 
     /// Unique string to identify the protected item.

@@ -4,6 +4,8 @@ use serde_aux::field_attributes::deserialize_number_from_string;
 
 use crate::{Error, Response, SenhaseguraClient};
 
+use super::ProtectedInformationIdentifier;
+
 /// Access protected information API response.
 #[derive(serde::Deserialize, Debug)]
 #[cfg_attr(feature = "napi", napi_derive::napi(object))]
@@ -25,7 +27,7 @@ pub struct AccessProtectedInformationResult {
     #[serde(deserialize_with = "deserialize_number_from_string")]
     pub id: i32,
 
-    /// TODO: What is this?
+    /// Information identifier.
     pub tag: Option<String>,
 
     /// Information type.
@@ -43,7 +45,7 @@ pub trait AccessProtectedInformationApi: Send + Sync {
     /// Returns the protected information item.
     async fn access_protected_information(
         &self,
-        id: i32,
+        id: ProtectedInformationIdentifier,
     ) -> Result<AccessProtectedInformationApiResponse, Error>;
 }
 
@@ -52,7 +54,7 @@ impl AccessProtectedInformationApi for SenhaseguraClient {
     #[tracing::instrument(level = "info", skip(self), err)]
     async fn access_protected_information(
         &self,
-        id: i32,
+        id: ProtectedInformationIdentifier,
     ) -> Result<AccessProtectedInformationApiResponse, Error> {
         self.do_api_request(Method::GET, format!("iso/pam/info/{id}"), None::<()>)
             .await
@@ -71,9 +73,9 @@ mod senhasegura_js {
         #[napi(js_name = accessProtectedInformation)]
         pub async fn js_access_protected_information(
             &self,
-            id: i32,
+            id: napi::Either<i32, String>,
         ) -> napi::Result<AccessProtectedInformationApiResponse> {
-            <Self as AccessProtectedInformationApi>::access_protected_information(self, id)
+            <Self as AccessProtectedInformationApi>::access_protected_information(self, id.into())
                 .await
                 .map_err(Into::into)
         }
@@ -89,10 +91,13 @@ mod senhasegura_uniffi {
         /// Returns the protected information item.
         fn access_protected_information(
             &self,
-            id: i32,
+            id: String,
         ) -> Result<AccessProtectedInformationApiResponse, Error> {
             self.async_runtime()?.block_on(
-                <Self as AccessProtectedInformationApi>::access_protected_information(self, id),
+                <Self as AccessProtectedInformationApi>::access_protected_information(
+                    self,
+                    id.into(),
+                ),
             )
         }
     }

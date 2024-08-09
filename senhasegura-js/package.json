@@ -1,6 +1,6 @@
 {
   "name": "senhasegura-js",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Senhasegura API client for Node.js",
   "keywords": [
     "senhasegura"
@@ -10,7 +10,10 @@
   "author": "Gabriel Kim <gabrielkim13@gmail.com> (https://github.com/gabrielkim13)",
   "main": "index.js",
   "types": "index.d.ts",
-  "repository": "github:gabrielkim13/senhasegura-rs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielkim13/senhasegura-rs.git"
+  },
   "scripts": {
     "artifacts": "napi artifacts",
     "build": "napi build --platform --release",

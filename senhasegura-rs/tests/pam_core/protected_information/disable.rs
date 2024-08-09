@@ -32,7 +32,7 @@ async fn test_disable_protected_information(fixture: &mut Fixture) {
 
     fixture
         .client()
-        .disable_protected_information(id)
+        .disable_protected_information(id.into())
         .await
         .unwrap();
 }

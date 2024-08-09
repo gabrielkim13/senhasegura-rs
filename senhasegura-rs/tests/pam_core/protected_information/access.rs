@@ -44,7 +44,7 @@ async fn test_access_protected_information(fixture: &mut Fixture) {
 
     let response = fixture
         .client()
-        .access_protected_information(id)
+        .access_protected_information(id.into())
         .await
         .unwrap();
 
@@ -84,7 +84,7 @@ async fn test_access_protected_information_not_found(fixture: &mut Fixture) {
 
     let response = fixture
         .client()
-        .access_protected_information(id)
+        .access_protected_information(id.into())
         .await
         .unwrap_err();
 
@@ -139,7 +139,7 @@ async fn test_access_protected_information_unknown_exception(fixture: &mut Fixtu
 
     let response = fixture
         .client()
-        .access_protected_information(id)
+        .access_protected_information(id.into())
         .await
         .unwrap_err();
 
