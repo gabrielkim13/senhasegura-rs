@@ -17,7 +17,7 @@
 //! let client = SenhaseguraClient::builder(base_url, client_id, client_secret).build()?;
 //!
 //! // Access protected information
-//! println!("{:#?}", client.access_protected_information(28.into()).await?);
+//! println!("{:#?}", client.access_protected_information(28).await?);
 //!
 //! # Ok::<_, anyhow::Error>(())
 //! # });

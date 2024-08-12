@@ -1,6 +1,6 @@
 {
   "name": "senhasegura-js",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Senhasegura API client for Node.js",
   "keywords": [
     "senhasegura"
@@ -18,7 +18,6 @@
     "artifacts": "napi artifacts",
     "build": "napi build --platform --release",
     "build:debug": "napi build --platform",
-    "prepublishOnly": "napi prepublish -t npm",
     "test": "ava",
     "universal": "napi universal",
     "version": "napi version"
@@ -37,10 +36,5 @@
     "name": "senhasegura-js",
     "triples": {}
   },
-  "packageManager": "yarn@4.4.0",
-  "optionalDependencies": {
-    "senhasegura-js-win32-x64-msvc": "0.2.1",
-    "senhasegura-js-darwin-x64": "0.2.1",
-    "senhasegura-js-linux-x64-gnu": "0.2.1"
-  }
+  "packageManager": "yarn@4.4.0"
 }

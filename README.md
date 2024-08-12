@@ -120,7 +120,7 @@ its bindings. However, C#, Go and C++ bindings require installing third-party _b
 
 ```toml
 [dependencies]
-senhasegura-rs = "0.2"
+senhasegura-rs = "0.3"
 ```
 
 #### Node.js

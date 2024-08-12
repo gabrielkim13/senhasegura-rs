@@ -22,7 +22,7 @@ pub trait DisableProtectedInformationApi: Send + Sync {
     /// Disables the protected information item.
     async fn disable_protected_information(
         &self,
-        id: ProtectedInformationIdentifier,
+        id: impl Into<ProtectedInformationIdentifier> + std::fmt::Debug + Send,
     ) -> Result<DisableProtectedInformationApiResponse, Error>;
 }
 
@@ -31,10 +31,14 @@ impl DisableProtectedInformationApi for SenhaseguraClient {
     #[tracing::instrument(level = "info", skip(self), err)]
     async fn disable_protected_information(
         &self,
-        id: ProtectedInformationIdentifier,
+        id: impl Into<ProtectedInformationIdentifier> + std::fmt::Debug + Send,
     ) -> Result<DisableProtectedInformationApiResponse, Error> {
-        self.do_api_request(Method::DELETE, format!("iso/pam/info/{id}"), None::<()>)
-            .await
+        self.do_api_request(
+            Method::DELETE,
+            format!("iso/pam/info/{}", id.into()),
+            None::<()>,
+        )
+        .await
     }
 }
 
@@ -52,7 +56,7 @@ mod senhasegura_js {
             &self,
             id: napi::Either<i32, String>,
         ) -> napi::Result<DisableProtectedInformationApiResponse> {
-            <Self as DisableProtectedInformationApi>::disable_protected_information(self, id.into())
+            <Self as DisableProtectedInformationApi>::disable_protected_information(self, id)
                 .await
                 .map_err(Into::into)
         }
@@ -71,10 +75,7 @@ mod senhasegura_uniffi {
             id: String,
         ) -> Result<DisableProtectedInformationApiResponse, Error> {
             self.async_runtime()?.block_on(
-                <Self as DisableProtectedInformationApi>::disable_protected_information(
-                    self,
-                    id.into(),
-                ),
+                <Self as DisableProtectedInformationApi>::disable_protected_information(self, id),
             )
         }
     }
