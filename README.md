@@ -98,6 +98,13 @@ for [Node.js](https://nodejs.org/).
 In order to work on the [senhasegura-js](./senhasegura-js/) library project, an installation of
 Node.js is required.
 
+To support Linux systems with an older glibc version, use [Zig](https://ziglang.org/) to compile the
+library under a specific ABI version:
+
+```sh
+yarn build --zig --zig-abi-prefix=2.28
+```
+
 #### UniFFI
 
 This project uses [UniFFI](https://mozilla.github.io/uniffi-rs/latest/) to generate bindings for
