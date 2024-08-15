@@ -52,8 +52,11 @@ default = ["retry"]
 # Enables exponential backoff retry strategy
 retry = ["dep:reqwest-middleware", "dep:reqwest-retry"]
 
+# Enables blocking methods
+blocking = ["dep:once_cell", "tokio/rt-multi-thread"]
+
 # NAPI-RS bindings for Node.js integration
 napi = ["dep:napi", "dep:napi-derive"]
 
 # UniFFI bindings
-uniffi = ["dep:once_cell", "dep:uniffi", "tokio/rt-multi-thread"]
+uniffi = ["blocking", "dep:uniffi"]

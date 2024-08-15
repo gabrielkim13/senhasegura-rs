@@ -42,6 +42,20 @@ impl DisableProtectedInformationApi for SenhaseguraClient {
     }
 }
 
+#[cfg(feature = "blocking")]
+#[cfg_attr(feature = "uniffi", uniffi::export)]
+impl SenhaseguraClient {
+    /// Disables the protected information item.
+    pub fn disable_protected_information_sync(
+        &self,
+        id: String,
+    ) -> Result<DisableProtectedInformationApiResponse, Error> {
+        self.async_runtime()?.block_on(
+            <Self as DisableProtectedInformationApi>::disable_protected_information(self, id),
+        )
+    }
+}
+
 #[cfg(feature = "napi")]
 mod senhasegura_js {
     use napi_derive::napi;
@@ -59,24 +73,6 @@ mod senhasegura_js {
             <Self as DisableProtectedInformationApi>::disable_protected_information(self, id)
                 .await
                 .map_err(Into::into)
-        }
-    }
-}
-
-#[cfg(feature = "uniffi")]
-mod senhasegura_uniffi {
-    use super::*;
-
-    #[uniffi::export]
-    impl SenhaseguraClient {
-        /// Disables the protected information item.
-        async fn disable_protected_information(
-            &self,
-            id: String,
-        ) -> Result<DisableProtectedInformationApiResponse, Error> {
-            self.async_runtime()?.block_on(
-                <Self as DisableProtectedInformationApi>::disable_protected_information(self, id),
-            )
         }
     }
 }

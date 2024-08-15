@@ -86,6 +86,20 @@ impl CreateProtectedInformationApi for SenhaseguraClient {
     }
 }
 
+#[cfg(feature = "blocking")]
+#[cfg_attr(feature = "uniffi", uniffi::export)]
+impl SenhaseguraClient {
+    /// Creates a protected information item.
+    pub fn create_protected_information_sync(
+        &self,
+        request: CreateProtectedInformationApiRequest,
+    ) -> Result<CreateProtectedInformationApiResponse, Error> {
+        self.async_runtime()?.block_on(
+            <Self as CreateProtectedInformationApi>::create_protected_information(self, request),
+        )
+    }
+}
+
 #[cfg(feature = "napi")]
 mod senhasegura_js {
     use napi_derive::napi;
@@ -103,26 +117,6 @@ mod senhasegura_js {
             <Self as CreateProtectedInformationApi>::create_protected_information(self, request)
                 .await
                 .map_err(Into::into)
-        }
-    }
-}
-
-#[cfg(feature = "uniffi")]
-mod senhasegura_uniffi {
-    use super::*;
-
-    #[uniffi::export]
-    impl SenhaseguraClient {
-        /// Creates a protected information item.
-        fn create_protected_information(
-            &self,
-            request: CreateProtectedInformationApiRequest,
-        ) -> Result<CreateProtectedInformationApiResponse, Error> {
-            self.async_runtime()?.block_on(
-                <Self as CreateProtectedInformationApi>::create_protected_information(
-                    self, request,
-                ),
-            )
         }
     }
 }

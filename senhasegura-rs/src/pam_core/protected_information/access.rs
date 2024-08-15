@@ -65,6 +65,20 @@ impl AccessProtectedInformationApi for SenhaseguraClient {
     }
 }
 
+#[cfg(feature = "blocking")]
+#[cfg_attr(feature = "uniffi", uniffi::export)]
+impl SenhaseguraClient {
+    /// Returns the protected information item.
+    pub fn access_protected_information_sync(
+        &self,
+        id: String,
+    ) -> Result<AccessProtectedInformationApiResponse, Error> {
+        self.async_runtime()?.block_on(
+            <Self as AccessProtectedInformationApi>::access_protected_information(self, id),
+        )
+    }
+}
+
 #[cfg(feature = "napi")]
 mod senhasegura_js {
     use napi_derive::napi;
@@ -82,24 +96,6 @@ mod senhasegura_js {
             <Self as AccessProtectedInformationApi>::access_protected_information(self, id)
                 .await
                 .map_err(Into::into)
-        }
-    }
-}
-
-#[cfg(feature = "uniffi")]
-mod senhasegura_uniffi {
-    use super::*;
-
-    #[uniffi::export]
-    impl SenhaseguraClient {
-        /// Returns the protected information item.
-        fn access_protected_information(
-            &self,
-            id: String,
-        ) -> Result<AccessProtectedInformationApiResponse, Error> {
-            self.async_runtime()?.block_on(
-                <Self as AccessProtectedInformationApi>::access_protected_information(self, id),
-            )
         }
     }
 }
