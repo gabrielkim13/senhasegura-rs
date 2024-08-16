@@ -1,0 +1,187 @@
+language = "C"
+
+header = """
+/**
+ * MIT License
+ *
+ * Copyright (c) 2024 Gabriel Kim
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/**
+ * @file senhasegura_c.h
+ * @author Gabriel Kim <gabrielkim13@gmail.com>
+ * @date 2024-08-15
+ * @brief Senhasegura API client for C
+ *
+ * @see https://github.com/gabrielkim13/senhasegura-rs
+ */
+"""
+# trailer = ""
+
+include_guard = "senhasegura_c_h"
+pragma_once = false
+
+# autogen_warning = ""
+# include_version = false
+
+# namespace = "senhasegura_c"
+# namespaces = ["senhasegura_c"]
+# using_namespaces = ["senhasegura_c"]
+
+sys_includes = []
+includes = []
+
+no_includes = false
+
+cpp_compat = false
+
+# after_includes = ""
+
+braces = "SameLine"
+line_length = 100
+tab_width = 4
+documentation = true
+documentation_style = "doxy"
+documentation_length = "full"
+
+style = "both"
+usize_is_size_t = true
+
+[defines]
+
+[export]
+include = []
+exclude = []
+
+prefix = ""
+
+# item_types = []
+
+renaming_overrides_prefixing = false
+
+[export.rename]
+
+[export.pre_body]
+
+[export.body]
+
+[export.mangle]
+# rename_types = "PascalCase"
+remove_underscores = false
+
+[layout]
+# packed = "PACKED"
+# aligned_n = "ALIGNED"
+
+[fn]
+# prefix = ""
+# postfix = ""
+
+args = "auto"
+
+# must_use = ""
+# deprecated = ""
+# deprecated_with_notes = ""
+# no_return = ""
+
+# swift_name_macro = "CF_SWIFT_NAME"
+
+rename_args = "None"
+
+sort_by = "None"
+
+[struct]
+rename_fields = "None"
+
+# must_use = ""
+# deprecated = ""
+# deprecated_with_notes = ""
+
+associated_constants_in_body = false
+
+derive_constructor = false
+derive_eq = false
+derive_neq = false
+derive_lt = false
+derive_lte = false
+derive_gt = false
+derive_gte = false
+
+[enum]
+rename_variants = "ScreamingSnakeCase"
+
+add_sentinel = false
+
+prefix_with_name = false
+
+# enum_class = false
+# derive_helper_methods = false
+# derive_const_casts = false
+# derive_mut_casts = false
+
+# cast_assert_name = "assert"
+
+# must_use = ""
+# deprecated = ""
+# deprecated_with_notes = ""
+# deprecated_variant = ""
+# deprecated_variant_with_notes = ""
+
+# derive_tagged_enum_destructor = false
+# derive_tagged_enum_copy_constructor = false
+# derive_tagged_enum_copy_assignment = false
+# private_default_tagged_enum_constructor = false
+
+[const]
+allow_static_const = true
+allow_constexpr = false
+
+sort_by = "None"
+
+[macro_expansion]
+bitflags = false
+
+[parse]
+parse_deps = false
+
+include = []
+exclude = []
+
+clean = false
+
+extra_bindings = []
+
+[parse.expand]
+crates = []
+
+all_features = false
+default_features = true
+
+features = []
+
+[ptr]
+# non_null_attribute = ""
+
+[cython]
+# header = "*"
+
+[cython.cimports]
+# module = ["name1", "name2"]

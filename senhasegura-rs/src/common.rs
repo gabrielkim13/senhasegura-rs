@@ -87,6 +87,9 @@ pub struct Response {
 
     /// Flag to indicate whether an error occurred.
     pub error: bool,
+
+    /// Error code.
+    pub error_code: i32,
 }
 
 /// Senhasegura API exception codes.
@@ -98,6 +101,31 @@ pub enum ExceptionCode {
 
     /// Unknown exception code.
     Unknown(u16),
+}
+
+impl From<ExceptionCode> for u16 {
+    fn from(value: ExceptionCode) -> Self {
+        use ExceptionCode::*;
+
+        match value {
+            PAMCore(PAMCoreExceptionCode::ProtectedInformation(code)) => code as u16,
+            Unknown(code) => code,
+        }
+    }
+}
+
+impl From<u16> for ExceptionCode {
+    fn from(value: u16) -> Self {
+        use crate::ProtectedInformationExceptionCode;
+
+        use self::{ExceptionCode::*, PAMCoreExceptionCode::*};
+
+        if let Some(code) = ProtectedInformationExceptionCode::from_repr(value) {
+            PAMCore(ProtectedInformation(code))
+        } else {
+            Unknown(value)
+        }
+    }
 }
 
 /// Exception (i.e. "exception") field.
@@ -178,31 +206,13 @@ mod senhasegura_js {
 
     impl ToNapiValue for ExceptionCode {
         unsafe fn to_napi_value(env: sys::napi_env, value: Self) -> Result<sys::napi_value> {
-            use super::{ExceptionCode::*, PAMCoreExceptionCode::*};
-
-            u16::to_napi_value(
-                env,
-                match value {
-                    PAMCore(ProtectedInformation(code)) => code as u16,
-                    Unknown(code) => code,
-                },
-            )
+            u16::to_napi_value(env, value.into())
         }
     }
 
     impl FromNapiValue for ExceptionCode {
         unsafe fn from_napi_value(env: sys::napi_env, nvalue: sys::napi_value) -> Result<Self> {
-            use crate::ProtectedInformationExceptionCode;
-
-            use super::{ExceptionCode::*, PAMCoreExceptionCode::*};
-
-            u16::from_napi_value(env, nvalue).map(|v| {
-                if let Some(code) = ProtectedInformationExceptionCode::from_repr(v) {
-                    PAMCore(ProtectedInformation(code))
-                } else {
-                    Unknown(v)
-                }
-            })
+            u16::from_napi_value(env, nvalue).map(|v| v.into())
         }
     }
 
@@ -239,27 +249,11 @@ mod senhasegura_uniffi {
         type Builtin = u16;
 
         fn into_custom(val: Self::Builtin) -> uniffi::Result<Self> {
-            use crate::ProtectedInformationExceptionCode;
-
-            use super::{ExceptionCode::*, PAMCoreExceptionCode::*};
-
-            let exception_code =
-                if let Some(code) = ProtectedInformationExceptionCode::from_repr(val) {
-                    PAMCore(ProtectedInformation(code))
-                } else {
-                    Unknown(val)
-                };
-
-            Ok(exception_code)
+            Ok(val.into())
         }
 
         fn from_custom(obj: Self) -> Self::Builtin {
-            use super::{ExceptionCode::*, PAMCoreExceptionCode::*};
-
-            match obj {
-                PAMCore(ProtectedInformation(code)) => code as u16,
-                Unknown(code) => code,
-            }
+            obj.into()
         }
     }
 }

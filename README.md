@@ -90,6 +90,17 @@ cargo install --locked cargo-xwin
 rustup target add x86_64-pc-windows-msvc
 ```
 
+#### cbindgen
+
+This project uses [cbindgen](https://github.com/mozilla/cbindgen/blob/master/docs.md) to generate
+the C header file with the FFI of the library.
+
+To install it, run:
+
+```sh
+cargo install --force cbindgen
+```
+
 #### NAPI-RS
 
 This project uses [NAPI-RS](https://napi.rs/) to generate JS bindings, adding first-class support
@@ -113,11 +124,11 @@ multiple languages, such as [Python](https://www.python.org/),
 [C++](https://cppreference.com).
 
 UniFFI supports generating Python bindings out of the box and nothing else is required to generate
-its bindings. However, C#, Go and C++ bindings require installing third-party _bindgen_ tooling:
+its bindings. However, C++, C# and Go bindings require installing third-party _bindgen_ tooling:
 
+- [uniffi-bindgen-cpp](https://github.com/NordSecurity/uniffi-bindgen-cpp)
 - [uniffi-bindgen-cs](https://github.com/NordSecurity/uniffi-bindgen-cs)
 - [uniffi-bindgen-go](https://github.com/NordSecurity/uniffi-bindgen-go)
-- [uniffi-bindgen-cpp](https://github.com/NordSecurity/uniffi-bindgen-go)
 
 ### Installation
 
@@ -130,9 +141,13 @@ its bindings. However, C#, Go and C++ bindings require installing third-party _b
 senhasegura-rs = "0.3"
 ```
 
+#### C
+
+See [senhasegura-c](senhasegura-c/README.md).
+
 #### Node.js
 
-See [senhasegura-js/README.md](senhasegura-js/README.md).
+See [senhasegura-js](senhasegura-js/README.md).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -155,15 +170,31 @@ let client = SenhaseguraClient::builder(base_url, client_id, client_secret).buil
 println!("{:#?}", client.access_protected_information(28)?);
 ```
 
+### C
+
+See [senhasegura-c](senhasegura-c/README.md).
+
 ### Node.js
 
-See [senhasegura-js/README.md](senhasegura-js/README.md).
+See [senhasegura-js](senhasegura-js/README.md).
 
 _For more examples, please refer to the [Documentation](https://docs.rs/senhasegura-rs/latest/senhasegura-rs)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Build
+
+### [cbindgen](https://github.com/mozilla/cbindgen)
+
+The build process for the C header file with the FFI of the library is automated by `cbindgen`'s
+CLI:
+
+```sh
+cbindgen \
+    --config senhasegura-c/cbindgen.toml \
+    --crate senhasegura-c \
+    --output bindings/senhasegura_c.h
+```
 
 ### [NAPI-RS](https://napi.rs/)
 
@@ -203,22 +234,22 @@ The generated bindings and binaries (i.e. `*.node` files) are kept at the root o
        --no-format
    ```
 
-3. Generate C# bindings:
+3. Generate C++ bindings:
+
+   ```sh
+   uniffi-bindgen-cpp --library target/debug/libsenhasegura_rs.so --out-dir bindings
+   ```
+
+4. Generate C# bindings:
 
    ```sh
    uniffi-bindgen-cs --library target/debug/libsenhasegura_rs.so --out-dir bindings
    ```
 
-4. Generate Go bindings:
+5. Generate Go bindings:
 
    ```sh
    uniffi-bindgen-go --library target/debug/libsenhasegura_rs.so --out-dir bindings
-   ```
-
-5. Generate C++ bindings:
-
-   ```sh
-   uniffi-bindgen-cpp --library target/debug/libsenhasegura_rs.so --out-dir bindings
    ```
 
 6. Generate the Linux / Windows x64 _release_ binaries and copy them into the :
@@ -255,21 +286,20 @@ All generated bindings are kept in the [bindings](./bindings/) folder, but are i
 
 ### Languages
 
-- [x] [Rust](https://www.rust-lang.org/)
-
-- [NAPI-RS](https://napi.rs/)
-  - [x] [Node.js](https://nodejs.org/)
-
-* [UniFFI](https://mozilla.github.io/uniffi-rs/latest/)
-  - [ ] [Python](https://www.python.org/)
-  - [ ] [C#](https://dotnet.microsoft.com/languages/csharp)
-    - [uniffi-bindgen-cs](https://github.com/NordSecurity/uniffi-bindgen-cs)
-  - [ ] [Go](https://go.dev/)
-    - [uniffi-bindgen-go](https://github.com/NordSecurity/uniffi-bindgen-go)
-  - [ ] [C++](https://cppreference.com)
-    - [uniffi-bindgen-cpp](https://github.com/NordSecurity/uniffi-bindgen-go)
-
+- [x] [C](https://en.wikipedia.org/wiki/C_(programming_language))
+      ([cbindgen](https://github.com/mozilla/cbindgen))
+- [x] [C++](https://cppreference.com)
+      ([uniffi-bindgen-cpp](https://github.com/NordSecurity/uniffi-bindgen-cpp))
+- [x] [C#](https://dotnet.microsoft.com/languages/csharp)
+      ([uniffi-bindgen-cs](https://github.com/NordSecurity/uniffi-bindgen-cs))
+- [x] [Go](https://go.dev/)
+      ([uniffi-bindgen-go](https://github.com/NordSecurity/uniffi-bindgen-go))
+- [x] [Node.js](https://nodejs.org/)
+      ([NAPI-RS](https://napi.rs/))
 - [ ] [PHP](https://www.php.net/)
+- [x] [Python](https://www.python.org/)
+      ([UniFFI](https://mozilla.github.io/uniffi-rs/latest/))
+- [x] [Rust](https://www.rust-lang.org/)
 
 See the [open issues](https://github.com/gabrielkim13/senhasegura-rs/issues) for a full list of proposed features (and known issues).
 
@@ -306,6 +336,7 @@ Project Link: [https://github.com/gabrielkim13/senhasegura-rs](https://github.co
 
 ## Acknowledgments
 
+* [cbindgen](https://github.com/mozilla/cbindgen)
 * [NAPI-RS](https://napi.rs/)
 * [UniFFI](https://mozilla.github.io/uniffi-rs/latest/)
 

@@ -1633,6 +1633,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "senhasegura-c"
+version = "0.3.1"
+dependencies = [
+ "senhasegura-rs",
+ "thiserror",
+ "url",
+]
+
+[[package]]
 name = "senhasegura-js"
 version = "0.3.0"
 dependencies = [
@@ -1642,7 +1651,7 @@ dependencies = [
 
 [[package]]
 name = "senhasegura-rs"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "anyhow",
  "async-trait",

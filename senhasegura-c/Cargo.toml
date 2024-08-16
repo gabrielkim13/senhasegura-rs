@@ -1,0 +1,21 @@
+[package]
+name = "senhasegura-c"
+version = "0.3.1"
+edition = "2021"
+publish = true
+authors = ["Gabriel Kim<gabrielkim13@gmail.com>"]
+license = "MIT"
+description = "Senhasegura API client for C"
+repository = "https://github.com/gabrielkim13/senhasegura-rs"
+homepage = "https://github.com/gabrielkim13/senhasegura-rs"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies.senhasegura-rs]
+path = "../senhasegura-rs"
+features = ["blocking"]
+
+[dependencies]
+thiserror = "1"
+url = "2"
